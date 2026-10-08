@@ -52,7 +52,10 @@ SHA256:   217317a359147fe6b0855f4b5abde876a21ca39c0760844026b4922e049e7ceb
 PDB GUID: CDF7B3740E839EBFFBF7F38A35024F391
 Version:  10.0.28000.2804
 OS:       Windows 11 Insider Preview
-Repo structure
+```
+
+# Repo structure
+```
 README.md — this file
 bug/static-analysis.md — full disassembly evidence, locking audit, lost-update scenario (existing)
 bug/live-confirmation.md — WinDbg output, watchpoints, FREE to DEREF proof
