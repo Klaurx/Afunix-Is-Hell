@@ -31,7 +31,7 @@ Refcount hitting zero inside AfUnixTlConnectEndpointClose confirmed live
 FREE(P=ffffe50c7f40cdd0) followed by POST-FREE DEREF(P=ffffe50c7f40cdd0) at AfUnixDeliverDataToClient+0x194 in a single continuous run under Driver Verifier special pool
 
 The UAF callstack
-
+```
 afunix!AfUnixDeliverDataToClient+0x194   ← mov rax,[rcx+0x178] on freed endpoint
 afunix!AfUnixDeliverEndpointSend+0x1e4
 afunix!AfUnixTlConnectEndpointSend+0x118
@@ -41,6 +41,7 @@ afd!AfdFastIoDeviceControl+0xe1e
 nt!IopXxxControlFile+0x431
 nt!NtDeviceIoControlFile+0x5e
 nt!KiSystemServiceCopyEnd+0x25
+```
 
 Normal unprivileged WSASend crossing the syscall boundary, going through AFD, reaching afunix, dereferencing freed kernel pool memory.
 
@@ -57,6 +58,8 @@ bug/static-analysis.md — full disassembly evidence, locking audit, lost-update
 bug/live-confirmation.md — WinDbg output, watchpoints, FREE to DEREF proof
 bug/uaf-chain.md — the full UAF geometry, ref bracket analysis, window measurements
 poc/measure.c — window measurement and UAF trigger
+poc/measurement2.c
+poc/measurement3.c
 ```
 
 UAF confirmed after closure during continued independent research.
