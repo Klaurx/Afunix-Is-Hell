@@ -7,6 +7,7 @@ what dis is;
 Any unprivileged process can open an AF_UNIX socket and drive afunix.sys into a state where it frees a kernel endpoint struct while another thread is still executing inside it. That thread then dereferences the freed memory. Confirmed live under Driver Verifier special pool with full attribution.
 
 The chain
+```
 non-atomic OR outside pushlock
     → delivery flags corrupted (+0x1c0)
         → buffer accounting permanently short-circuited
@@ -18,7 +19,8 @@ non-atomic OR outside pushlock
                             → destructor called without refcount increment
                                 → refcount underflow
                                     → endpoint freed with live references
-                                        → UAF 
+                                        → UAF
+```
 
 
 Unlocked OR firing at AfUnixDeliverDataToClient+0x1d0 with pushlock measured not held
