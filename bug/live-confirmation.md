@@ -101,14 +101,15 @@ nt!KiSystemServiceCopyEnd+0x25
 
 Normal unprivileged WSASend crossing the syscall boundary, going through AFD, reaching afunix, executing mov rax, [rcx+0x178] on a freed endpoint struct.
 
-What This Confirms
-The endpoint has no refcount bracket in this call path — AfUnixDeliverDataToClient takes no reference on entry, and the caller (fcn.140009d74 at 0x14000a4e0) takes none either
-The pushlock is dropped mid-function at 0x14000aaef and not reacquired until 0x14000acdc — a concurrent close acquires it instantly during that window and runs to completion including the free
-The dereference at +0x194 reads from the endpoint struct directly — with Driver Verifier special pool enabled the page is unmapped on free, making this a guaranteed fault if the timing lands
+# confirmed things
+
+The endpoint has no refcount bracket in this call path ```AfUnixDeliverDataToClient``` takes no reference on entry, and the caller (fcn.140009d74 at 0x14000a4e0) takes none either
+
+
+The pushlock is dropped mid-function at 0x14000aaef and not reacquired until ```0x14000acdc```, a concurrent close acquires it instantly during that window and runs to completion including the free
+
+
+The dereference at +0x194 reads from the endpoint struct directly, with Driver Verifier special pool enabled the page is unmapped on free, making this a guaranteed fault if the timing lands
+
+
 The entire path is reachable from an unprivileged WSASend with no special setup beyond opening an AF_UNIX socket pair
-Environment
-OS:        Windows 11 Insider Preview 10.0.28000.2804
-Binary:    afunix.sys
-SHA256:    217317a359147fe6b0855f4b5abde876a21ca39c0760844026b4922e049e7ceb
-Verifier:  special pool + pool tracking + force IRQL checking enabled on afunix.sys
-Debugger:  WinDbg over kdnet, kernel debug session
