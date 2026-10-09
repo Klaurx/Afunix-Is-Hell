@@ -63,6 +63,12 @@ bug/uaf-chain.md — the full UAF geometry, ref bracket analysis, window measure
 poc/measure.c — window measurement and UAF trigger
 poc/measurement2.c
 poc/measurement3.c
+logs/afunix_uaf_1d30_2026-10-08_09-21-47-210
+logs/Screenshot 2026-10-08 092245
+logs/Screenshot 2026-10-08 075136
+logs/Screenshot 2026-10-07 024209
+logs/Screenshot 2026-10-02 102755
+logs/Screenshot 2026-10-02 131626
 ```
 
 UAF confirmed after closure during continued independent research.
