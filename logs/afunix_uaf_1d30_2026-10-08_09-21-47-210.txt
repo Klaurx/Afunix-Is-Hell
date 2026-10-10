@@ -1,0 +1,109 @@
+Opened log file 'C:\Users\Pc\Desktop\afunix_uaf_1d30_2026-10-08_09-21-47-210.txt'
+2: kd> r rcx
+rcx=ffffe50c7f40cdd0
+2: kd> dq @rcx L20
+ffffe50c`7f40cdd0  00000000`00000003 00000000`00000000
+ffffe50c`7f40cde0  ffffe50c`7f402fd0 ffffa583`3c1cf0c0
+ffffe50c`7f40cdf0  00000000`00000000 00000000`00000000
+ffffe50c`7f40ce00  00000000`00000000 6d65545c`3a430001
+ffffe50c`7f40ce10  78696e75`66615c70 6f732e74`7365745f
+ffffe50c`7f40ce20  00000000`00006b63 00000000`00000000
+ffffe50c`7f40ce30  00000000`00000000 00000000`00000000
+ffffe50c`7f40ce40  00000000`00000000 00000000`00000000
+ffffe50c`7f40ce50  00000000`00000000 00000000`00000000
+ffffe50c`7f40ce60  00000000`00000000 00000000`00000000
+ffffe50c`7f40ce70  00000000`00000000 00000000`00000000
+ffffe50c`7f40ce80  00000000`00000000 00000000`00000000
+ffffe50c`7f40ce90  00000000`00000000 00000000`00000000
+ffffe50c`7f40cea0  00000000`00000000 00000002`00000000
+ffffe50c`7f40ceb0  00000000`00000001 fffff806`aa5e9ba0
+ffffe50c`7f40cec0  00000000`00000000 00000000`00000000
+2: kd> !pool @rcx
+Pool page ffffe50c7f40cdd0 region is Special pool
+*ffffe50c7f40c000 size:  230 data: ffffe50c7f40cdd0 (NonPaged) *Wnpi
+		Owning component : Unknown (update pooltag.txt)
+2: kd> k
+ # Child-SP          RetAddr               Call Site
+00 fffff60e`b7aed2b0 fffff806`aa5eb048     afunix!AfUnixDeliverDataToClient+0x194
+01 fffff60e`b7aed390 fffff806`aa5e16a8     afunix!AfUnixDeliverEndpointSend+0x1e4
+02 fffff60e`b7aed3e0 fffff806`aa6ae008     afunix!AfUnixTlConnectEndpointSend+0x118
+03 fffff60e`b7aed420 fffff806`aa6b334f     afd!AfdTLStartBufferedVcSend+0xd8
+04 fffff60e`b7aed650 fffff806`aa6b5a4e     afd!AfdFastConnectionSend+0x497
+05 fffff60e`b7aed720 fffff807`a07d32f1     afd!AfdFastIoDeviceControl+0xe1e
+06 fffff60e`b7aed9d0 fffff807`a07d2eae     nt!IopXxxControlFile+0x431
+07 fffff60e`b7aedb10 fffff807`a05a9c15     nt!NtDeviceIoControlFile+0x5e
+08 fffff60e`b7aedb80 00007ffa`af362144     nt!KiSystemServiceCopyEnd+0x25
+09 00000080`001fdba8 00007ffa`accfe950     0x00007ffa`af362144
+0a 00000080`001fdbb0 00000000`00000001     0x00007ffa`accfe950
+0b 00000080`001fdbb8 00000000`00000008     0x1
+0c 00000080`001fdbc0 00000080`00490000     0x8
+0d 00000080`001fdbc8 00007ffa`af21cdf9     0x00000080`00490000
+0e 00000080`001fdbd0 00000080`001ff020     0x00007ffa`af21cdf9
+0f 00000080`001fdbd8 00007ffa`0001201f     0x00000080`001ff020
+10 00000080`001fdbe0 00000080`001fdc10     0x00007ffa`0001201f
+11 00000080`001fdbe8 00000080`00000018     0x00000080`001fdc10
+12 00000080`001fdbf0 00000000`00000000     0x00000080`00000018
+2: kd> u fffff806`aa5eabbc L10
+afunix!AfUnixDeliverDataToClient+0x194:
+fffff806`aa5eabbc 488b8178010000  mov     rax,qword ptr [rcx+178h]
+fffff806`aa5eabc3 488b8980010000  mov     rcx,qword ptr [rcx+180h]
+fffff806`aa5eabca 488b4010        mov     rax,qword ptr [rax+10h]
+fffff806`aa5eabce e8edec0000      call    fffff806`aa5f98c0
+fffff806`aa5eabd3 488b5de7        mov     rbx,qword ptr [rbp-19h]
+fffff806`aa5eabd7 4533db          xor     r11d,r11d
+fffff806`aa5eabda 488bcb          mov     rcx,rbx
+fffff806`aa5eabdd 458bcb          mov     r9d,r11d
+fffff806`aa5eabe0 4885db          test    rbx,rbx
+fffff806`aa5eabe3 740c            je      afunix!AfUnixDeliverDataToClient+0x1c9 (fffff806`aa5eabf1)
+fffff806`aa5eabe5 4c034918        add     r9,qword ptr [rcx+18h]
+fffff806`aa5eabe9 488b09          mov     rcx,qword ptr [rcx]
+fffff806`aa5eabec 4885c9          test    rcx,rcx
+fffff806`aa5eabef 75f4            jne     afunix!AfUnixDeliverDataToClient+0x1bd (fffff806`aa5eabe5)
+fffff806`aa5eabf1 3d1b0200c0      cmp     eax,0C000021Bh
+fffff806`aa5eabf6 7509            jne     afunix!AfUnixDeliverDataToClient+0x1d9 (fffff806`aa5eac01)
+2: kd> u fffff806`aa5eb921 L8
+afunix!AfUnixEndpointDereference+0x25:
+fffff806`aa5eb921 4885c0          test    rax,rax
+fffff806`aa5eb924 0f85bd010000    jne     afunix!AfUnixEndpointDereference+0x1eb (fffff806`aa5ebae7)
+fffff806`aa5eb92a 488b7110        mov     rsi,qword ptr [rcx+10h]
+fffff806`aa5eb92e 3881e0000000    cmp     byte ptr [rcx+0E0h],al
+fffff806`aa5eb934 0f848c000000    je      afunix!AfUnixEndpointDereference+0xca (fffff806`aa5eb9c6)
+fffff806`aa5eb93a 483981a8000000  cmp     qword ptr [rcx+0A8h],rax
+fffff806`aa5eb941 747c            je      afunix!AfUnixEndpointDereference+0xc3 (fffff806`aa5eb9bf)
+fffff806`aa5eb943 48ff1546c7ffff  call    qword ptr [afunix!_imp_KeEnterCriticalRegion (fffff806`aa5e8090)]
+2: kd> u fffff806`aa5ebaa0 L20
+afunix!AfUnixEndpointDereference+0x1a4:
+fffff806`aa5ebaa0 0e              ???
+fffff806`aa5ebaa1 488b8ff8000000  mov     rcx,qword ptr [rdi+0F8h]
+fffff806`aa5ebaa8 33d2            xor     edx,edx
+fffff806`aa5ebaaa e811de0000      call    fffff806`aa5f98c0
+fffff806`aa5ebaaf 33d2            xor     edx,edx
+fffff806`aa5ebab1 488bcf          mov     rcx,rdi
+fffff806`aa5ebab4 48ff15bdc5ffff  call    qword ptr [afunix!_imp_ExFreePoolWithTag (fffff806`aa5e8078)]
+fffff806`aa5ebabb 0f1f440000      nop     dword ptr [rax+rax]
+fffff806`aa5ebac0 4883c8ff        or      rax,0FFFFFFFFFFFFFFFFh
+fffff806`aa5ebac4 f0480fc106      lock xadd qword ptr [rsi],rax
+fffff806`aa5ebac9 4883e801        sub     rax,1
+fffff806`aa5ebacd 7f1f            jg      afunix!AfUnixEndpointDereference+0x1f2 (fffff806`aa5ebaee)
+fffff806`aa5ebacf 4885c0          test    rax,rax
+fffff806`aa5ebad2 7513            jne     afunix!AfUnixEndpointDereference+0x1eb (fffff806`aa5ebae7)
+fffff806`aa5ebad4 33d2            xor     edx,edx
+fffff806`aa5ebad6 488bce          mov     rcx,rsi
+fffff806`aa5ebad9 48ff1598c5ffff  call    qword ptr [afunix!_imp_ExFreePoolWithTag (fffff806`aa5e8078)]
+fffff806`aa5ebae0 0f1f440000      nop     dword ptr [rax+rax]
+fffff806`aa5ebae5 eb07            jmp     afunix!AfUnixEndpointDereference+0x1f2 (fffff806`aa5ebaee)
+fffff806`aa5ebae7 b90e000000      mov     ecx,0Eh
+fffff806`aa5ebaec cd29            int     29h
+fffff806`aa5ebaee 488b5c2430      mov     rbx,qword ptr [rsp+30h]
+fffff806`aa5ebaf3 488b742438      mov     rsi,qword ptr [rsp+38h]
+fffff806`aa5ebaf8 4883c420        add     rsp,20h
+fffff806`aa5ebafc 5f              pop     rdi
+fffff806`aa5ebafd c3              ret
+fffff806`aa5ebafe cc              int     3
+fffff806`aa5ebaff cc              int     3
+fffff806`aa5ebb00 cc              int     3
+fffff806`aa5ebb01 cc              int     3
+fffff806`aa5ebb02 cc              int     3
+fffff806`aa5ebb03 cc              int     3
+2: kd> .logclose
+Closing open log file C:\Users\Pc\Desktop\afunix_uaf_1d30_2026-10-08_09-21-47-210.txt
