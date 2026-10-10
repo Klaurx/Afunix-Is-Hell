@@ -1,21 +1,22 @@
-We went in to measure the duration of the unlocked window inside AfUnixDeliverDataToClient. We came out with a confirmed kernel UAF. This document covers how that happened.
+went in to measure the duration of the unlocked window inside ```AfUnixDeliverDataToClient```. came out wit a UAF. rhis document covers how that happened.
 
 The Starting Point
 
-We had already confirmed the race and the state corruption in the original report. The open question was whether the unlocked window between 0x14000aaef and 0x14000acdc was wide enough and accessible enough for a concurrent close to land inside it and free the endpoint while a delivery thread was still executing inside it.
+We had already confirmed the race and the state corruption in the original report. The open question was whether the unlocked window between ```0x14000aaef``` and ```0x14000acdc``` was wide enough and accessible enough for a concurrent close to land inside it and free the endpoint while a delivery thread was still executing inside it.
 
 To answer that we set two timestamp breakpoints:
 
+```
 bp <aaef> ".printf \"ENTER %p\n\", @$ttime; g"
 bp <acdc> ".printf \"EXIT %p\n\", @$ttime; g"
-
+```
 And built two PoCs to stress the window from different angles.
 
 # measurement2.c
 
-The first measurement PoC. Posts 64 overlapped WSARecv on the accept side without draining them, floods the send side with 64 x 65536 byte sends to back up the queue, then cancels the receives one at a time with Sleep(0) between each cancel.
+The first measurement PoC. posts 64 overlapped WSARecv on the accept side without draining them, floods the send side with 64 x 65536 byte sends to back up the queue, then cancels the receives one at a time with Sleep(0) between each cancel.
 
-The goal was to see if queue depth increased the time between ENTER and EXIT. The cancel burst was the mechanism — each cancellation drives one iteration of the IRP completion loop inside the unlocked window, and with 64 pending receives that loop has 64 iterations of work to do before the window closes.
+The goal was to see if queue depth increased the time between ENTER and EXIT. The cancel burst was the mechanism, each cancellation drives one iteration of the IRP completion loop inside the unlocked window, and with 64 pending receives that loop has 64 iterations of work to do before the window closes.
 
 The process stays alive indefinitely after the cancel burst so the kernel activity can be observed without the socket pair tearing down.
 
@@ -42,7 +43,7 @@ We put a conditional breakpoint on the dereference to capture the object:
 ```
 bp <+0x194> ".if (@rcx == TARGET) { .printf \"*** DEREF P=%p ***\n\", @rcx; } .else { g }"
 ```
-That gave us a concrete pointer — P = ffffe50c7f40cdd0.
+That gave us a concrete pointer — P = ```ffffe50c7f40cdd0```.
 
 Following P Backwards
 
