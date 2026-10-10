@@ -4,9 +4,9 @@ The full repo of the state corruption can be found [here](https://github.com/Kla
 
 what dis is;
 
-Any unprivileged process can open an AF_UNIX socket and drive afunix.sys into a state where it frees a kernel endpoint struct while another thread is still executing inside it. That thread then dereferences the freed memory. Confirmed live under Driver Verifier special pool with full attribution.
+any unpriv process can open an AF_UNIX socket and drive afunix.sys into a state where it frees a kernel endpoint struct while another thread is still executing inside it. that thread then dereferences the freed memory. confirmed live under Driver Verifier special pool with full attribution.
 
-The chain
+The chain;
 ```
 non-atomic OR outside pushlock
     → delivery flags corrupted (+0x1c0)
@@ -72,7 +72,7 @@ logs/Screenshot 2026-10-02 131626
 ```
 
 UAF confirmed after closure during continued independent research.
-Ceiling is unknown beyond UAF. LPE is plausible but not claimed here.
+Ceiling is unknown beyond UAF. non more claimed here. 
 This repo exists so the bug is documented publicly regardless of what MSRC decides to do with it.
 
 MSRC
